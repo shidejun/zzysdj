@@ -1,0 +1,20 @@
+#!/bin/sh
+
+set -e
+
+# Starting from version 2.0+dfsg1-1, BOOTSTRAP_DIR cwhas been replaced with a
+# symlink. Because dpkg will not replace a directory with a symlink, we need to
+# do that by hand.
+
+BOOTSTRAP_DIR=/usr/share/ntopng/httpdocs/bootstrap
+BOOTSTRAP_OLD_DIR=${BOOTSTRAP_DIR}.dpkg-old
+
+if [ \( "$1" = "configure" -o "$1" = "abort-upgrade" \) \
+        -a -d $BOOTSTRAP_DIR -a ! -L $BOOTSTRAP_DIR ]; then
+    # The unpacking performed by dpkg should have left the directory empty.
+    # If it is not empty, let's back it up.
+    rmdir $BOOTSTRAP_DIR 2> /dev/null || mv $BOOTSTRAP_DIR $BOOTSTRAP_OLD_DIR
+    ln -s ../../javascript/bootstrap $BOOTSTRAP_DIR
+fi
+
+

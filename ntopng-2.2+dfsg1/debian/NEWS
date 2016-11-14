@@ -1,0 +1,17 @@
+ntopng (1.2.1+dfsg1-2) unstable; urgency=low
+
+    The /etc/default/ntopng file is no longer supported. The configuration
+    file is read from /etc/ntopng.conf. The INTERFACES and HTTP_PORT settings
+    are automatically migrated to the new configuration file. However the
+    ADD_ARGS settings require to be moved manually. If the /etc/default/ntopng
+    file contains user modifications, it will be renamed to
+    /etc/default/ntopng.dpkg-backup.
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Sun, 26 Oct 2014 20:53:47 -0700
+
+ntopng (1.2.0+dfsg1-1) unstable; urgency=medium
+
+    The ENABLED flag in /etc/default/ntopng is no longer supported. Instead,
+    please use systemd systemctl(1) or sysv update-rc.d(8).
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Tue, 19 Aug 2014 11:51:05 -0700

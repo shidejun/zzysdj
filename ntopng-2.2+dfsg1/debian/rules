@@ -1,0 +1,121 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+export DEB_BUILD_MAINT_OPTIONS = hardening=+all
+
+%:
+	dh $@ --with systemd
+
+override_dh_auto_configure:
+	./autogen.sh
+	dh_auto_configure
+
+override_dh_auto_build:
+	dh_auto_build
+	mkdir -p debian/generated-code/
+	coffee -c -o debian/generated-code/ debian/missing-sources/gauge.coffee
+
+override_dh_auto_install:
+
+override_dh_strip:
+	dh_strip --dbg-package=ntopng-dbg
+
+override_dh_install-indep:
+	dh_install --indep \
+	    --exclude=.source-map.js \
+	    --exclude=README.gauge \
+	    --exclude=font-awesome \
+	    --exclude=redis.lua
+	rm -fr $(CURDIR)/debian/ntopng-data/usr/share/ntopng/httpdocs/bootstrap
+	find $(CURDIR)/debian/ntopng-data/usr/share -type f -exec chmod a-x {} \;
+	rm -fr $(CURDIR)/debian/ntopng-data/usr/share/ntopng/httpdocs/ssl
+
+override_dh_install-arch:
+	dh_install --arch
+
+override_dh_auto_clean:
+	dh_auto_clean
+	rm -fr debian/generated-code/
+
+DEB_UPSTREAM_VERSION=$(shell dpkg-parsechangelog \
+		     | sed -rne 's/^Version: ([^-]+).*/\1/p')
+PACKAGE=ntopng
+SRC_VERSION := $(shell dpkg-parsechangelog | sed -ne 's/^Version: \(\([0-9]\+\):\)\?\(.*\)-.*/\3/p')
+SVN_REVISION := $(shell echo $(SRC_VERSION) | grep -o '[+~]svn[0-9]\+' | sed -e 's/[+~]svn//')
+UPSTREAM_VERSION := $(shell echo $(SRC_VERSION) | cut -d + -f 1)
+TARBALL=$(PACKAGE)_$(SRC_VERSION).orig.tar.gz
+UPSTREAM_SVN_REPO = https://svn.ntop.org/svn/ntop/trunk/ntopng/
+
+get-orig-source:
+	@echo DEB_UPSTREAM_VERSION $(DEB_UPSTREAM_VERSION)
+	@echo SRC_VERSION $(SRC_VERSION)
+	@echo SVN_REVISION $(SVN_REVISION)
+	@echo UPSTREAM_VERSION $(UPSTREAM_VERSION)
+ifneq ($(findstring svn,$(SRC_VERSION)),)
+	# Download SVN version and prepare for possible repackaging
+	rm -rf get-orig-source ../$(TARBALL)
+	mkdir get-orig-source
+	svn export -r $(SVN_REVISION) $(UPSTREAM_SVN_REPO) \
+	    get-orig-source/$(PACKAGE)-$(SRC_VERSION).orig
+else
+    ifneq ($(findstring +dfsg,$(SRC_VERSION)),)
+	# Download upstream tarball and prepare for repackaging
+	uscan --verbose --force-download --download-version $(UPSTREAM_VERSION)
+	rm -rf get-orig-source ../$(TARBALL)
+	mkdir get-orig-source
+	tar zxf ../$(PACKAGE)_$(UPSTREAM_VERSION).orig.tar.gz -C get-orig-source
+	mv get-orig-source/* get-orig-source/$(PACKAGE)-$(SRC_VERSION).orig
+    else
+	# Download and use upstream vanilla tarball
+	uscan --verbose --download-version $(UPSTREAM_VERSION)
+    endif
+endif
+ifneq ($(findstring +dfsg,$(SRC_VERSION)),)
+	# We need to repackage.
+	# Remove unused 3rd party libs
+	rm -fr get-orig-source/*/httpdocs/bootstrap_3
+	rm -fr get-orig-source/*/httpdocs/css/Rickshaw
+	rm -fr get-orig-source/*/httpdocs/js/Rickshaw
+	rm -fr get-orig-source/*/httpdocs/js/handlebars-1.0.0.0.beta.6.js
+	rm -fr get-orig-source/*/httpdocs/js/serializeCFJSON-0.1.js
+	rm -fr get-orig-source/*/third-party/LuaJIT-*
+	rm -fr get-orig-source/*/third-party/hiredis
+	rm -fr get-orig-source/*/third-party/json-c
+	rm -fr get-orig-source/*/third-party/rrdtool-*
+	rm -fr get-orig-source/*/third-party/zeromq-*
+	# Remove unused nDPI library
+	rm -fr get-orig-source/*/nDPI
+	# Remove pre-compiled and automatically generated files
+	find get-orig-source/ '(' -name .libs -or -name .svn -or \
+	    -name autom4te.cache ')' -prune -exec rm -fr {} \;
+	find get-orig-source/*/third-party/EWAHBoolArray/ \
+	    -type f -perm /111 -delete || true
+	find get-orig-source/ '(' \
+	    -name '*.a' -or -name '*.la' -or \
+	    -name '*.o' -or -name '*.lo' -or \
+	    -name '*.so' -or -name '*.so.*' -or \
+	    -name '*~' -or -name '#*#' -or \
+	    -name 'Geo*.dat' ')' -delete
+	# Remove unsed files without source.
+	rm -f get-orig-source/*/httpdocs/js/highlight.min.js
+	rm -f get-orig-source/*/httpdocs/js/prettify.js
+	rm -f get-orig-source/*/httpdocs/css/prettify.css
+	rm -f get-orig-source/*/httpdocs/js/pdfmake.js
+	rm -f get-orig-source/*/httpdocs/js/vfs_fonts.js
+	# Remove documentation without source.
+	rm -fr get-orig-source/*/doc/UserGuide.*
+	# Remove .git tree.
+	rm -fr get-orig-source/*/.git
+endif
+ifneq ($(or $(findstring +dfsg,$(SRC_VERSION)), $(findstring +dfsg,$(SRC_VERSION))),)
+	# Need to create orig tarball.
+	GZIP='--best --no-name' tar czf ../$(TARBALL) -C get-orig-source \
+	     $(PACKAGE)-$(SRC_VERSION).orig
+	rm -rf get-orig-source
+endif
+
+.PHONY: override_dh_auto_install override_dh_strip override_dh_install-indep
+.PHONY: override_dh_install-arch get-orig-source

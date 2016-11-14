@@ -1,0 +1,17 @@
+ntopng is the new rewritten version of ntop.
+
+By default it listens on port 3000. This is the same port as ntop. Therefore,
+if you have ntop running, you will need to disable ntop or to change the port
+ntopng is listening on.
+
+To change the port ntopng is listening on, or on what interfaces to sniff on,
+you need to edit /etc/default/ntopng.
+
+The default credentials for the web UI are:
+username: admin
+password: admin
+You can change via the Admin menu in the web UI.
+See README.users for more details.
+
+The ntopng User Guide from upstream documentation can be found at
+https://svn.ntop.org/svn/ntop/trunk/ntopng/doc/UserGuide.pdf?p=8031

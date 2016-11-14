@@ -1,0 +1,5 @@
+log-filename.patch
+no-librt.patch
+use-system-ndpi.patch
+no-pwd.patch
+no-detectxsslib.patch

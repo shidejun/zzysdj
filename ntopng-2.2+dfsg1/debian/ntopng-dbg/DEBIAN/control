@@ -1,0 +1,29 @@
+Package: ntopng-dbg
+Source: ntopng
+Version: 2.2+dfsg1-1build1
+Architecture: amd64
+Maintainer: Ludovico Cavedon <cavedon@debian.org>
+Installed-Size: 1474
+Depends: ntopng (= 2.2+dfsg1-1build1)
+Section: debug
+Priority: extra
+Homepage: http://www.ntop.org/products/ntop/
+Description: High-Speed Web-based Traffic Analysis and Flow Collection Tool (debug symbols)
+ ntopng is the next generation version of the original ntop, a network
+ traffic probe that shows the network usage, similar to what the popular
+ top Unix command does. ntop is based on libpcap and it has been written
+ in a portable way in order to virtually run on every Unix platform,
+ MacOSX and on Win32 as well.
+ .
+ ntopng users can use a web browser to navigate through ntop (that acts as a
+ web server) traffic information and get a dump of the network status. In the
+ latter case, ntop can be seen as a simple RMON-like agent with an embedded web
+ interface. The use of:
+ .
+  * a web interface
+  * limited configuration and administration via the web interface
+  * reduced CPU and memory usage (they vary according to network size and
+  traffic)
+ .
+ This package contains the debug symbols for the ntopng daemon.
+Build-Ids: 096fc1d5a198fe0082d01b872030a47f87c2f7c7

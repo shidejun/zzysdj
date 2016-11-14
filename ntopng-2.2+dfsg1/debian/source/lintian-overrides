@@ -1,0 +1,9 @@
+# cal-heatmap.source-map.js is generate from the cal-heatmap.js, whis is
+# included in debian/missing-sources/cal-heatmap.js
+# In the current packageing, cal-heatmap.source-map.js is not generated and not
+# included in the binary packages.
+ntopng source: source-is-missing httpdocs/js/cal-heatmap.source-map.js
+# gauge.js which is generated from debian/missing-sources/gauge.cofee
+ntopng source: source-is-missing httpdocs/js/gauge.js line length is 292 characters (>256)
+# long regular expression from upstream
+ntopng source: source-is-missing httpdocs/js/ntopng_utils.js line length is 1301 characters (>512)

@@ -1,0 +1,15 @@
+Description: Avoid not needed linking against librt.
+Author: Ludovico Cavedon <cavedon@debian.org>
+
+Index: ntopng/configure.seed
+===================================================================
+--- ntopng.orig/configure.seed
++++ ntopng/configure.seed
+@@ -225,7 +225,6 @@ if test "x$ac_cv_lib_netfilter_queue_nfq
+ fi
+ 
+ AC_CHECK_LIB([nl], [nl_handle_alloc], [LDFLAGS="${LDFLAGS} -lnl"])
+-AC_CHECK_LIB([rt], [clock_gettime],   [LDFLAGS="${LDFLAGS} -lrt"])
+ 
+ dnl> ldl (used by edjdb)
+ AC_CHECK_LIB([dl], [dlopen], [LDFLAGS="${LDFLAGS} -ldl"])

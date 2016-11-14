@@ -1,0 +1,25 @@
+#!/bin/sh
+
+set -e
+
+# Starting from version 2.0+dfsg1-1, BOOTSTRAP_DIR cwhas been replaced with a
+# symlink. Because dpkg will not replace a directory with a symlink, we need to
+# do that by hand.
+# If we are dowgrading to a version that did not hav ethe symlink we need to
+# remove the symlink, otherwise dpkg will follow it when unpacking the package
+# with the old version.
+
+BOOTSTRAP_DIR=/usr/share/ntopng/httpdocs/bootstrap
+BOOTSTRAP_OLD_DIR=${BOOTSTRAP_DIR}.dpkg-old
+
+if [ "$1" = "upgrade" -a -L $BOOTSTRAP_DIR ] \
+        && dpkg --compare-versions "$2" lt "2.0+dfsg1-1~"; then
+    rm $BOOTSTRAP_DIR
+    # If we have a backup, let's restore it.
+    if [ -d $BOOTSTRAP_OLD_DIR ]; then
+        echo rename dir
+        mv $BOOTSTRAP_OLD_DIR $BOOTSTRAP_DIR
+    fi
+fi
+
+

@@ -1,0 +1,29 @@
+#!/bin/sh
+
+set -e
+
+. /usr/share/debconf/confmodule
+
+OLD_CONF="/etc/default/ntopng.dpkg-backup"
+CONF="/etc/ntopng.conf"
+
+
+if [ "$1" = configure -a -f $OLD_CONF ]; then
+    # Migrate settings (except ADD_ARGS) from /etc/default/ntopng to
+    # /etc/ntopng.conf
+    . $OLD_CONF || true
+    if [ -n "$HTTP_PORT" ]; then
+        sed -i -e "s/^-w=.*\$/-w=$HTTP_PORT/" $CONF
+    fi
+    if [ -n "$INTERFACES" ]; then
+        # Make sure the file ends with a newline.
+        echo >> $CONF
+        for i in $INTERFACES; do
+            echo "-i=$i" >> $CONF
+        done
+    fi
+fi
+
+dpkg-maintscript-helper rm_conffile /etc/default/ntopng 1.2.1+dfsg1-1.1 -- "$@"
+
+#DEBHELPER#

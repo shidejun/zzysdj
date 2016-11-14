@@ -1,0 +1,30 @@
+Package: ntopng-data
+Source: ntopng
+Version: 2.2+dfsg1-1build1
+Architecture: all
+Maintainer: Ludovico Cavedon <cavedon@debian.org>
+Installed-Size: 6026
+Depends: fonts-font-awesome, libjs-bootstrap, libjs-rickshaw, libjs-jquery-form, libjs-jquery-tablesorter
+Recommends: ntopng (= 2.2+dfsg1-1build1)
+Section: net
+Priority: extra
+Homepage: http://www.ntop.org/products/ntop/
+Description: High-Speed Web-based Traffic Analysis and Flow Collection Tool (data files)
+ ntopng is the next generation version of the original ntop, a network
+ traffic probe that shows the network usage, similar to what the popular
+ top Unix command does. ntop is based on libpcap and it has been written
+ in a portable way in order to virtually run on every Unix platform,
+ MacOSX and on Win32 as well.
+ .
+ ntopng users can use a web browser to navigate through ntop (that acts as a
+ web server) traffic information and get a dump of the network status. In the
+ latter case, ntop can be seen as a simple RMON-like agent with an embedded web
+ interface. The use of:
+ .
+  * a web interface
+  * limited configuration and administration via the web interface
+  * reduced CPU and memory usage (they vary according to network size and
+  traffic)
+ .
+ This package contains the architecture independent files for the ntopng
+ daemon.

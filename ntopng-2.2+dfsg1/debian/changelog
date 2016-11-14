@@ -1,0 +1,145 @@
+ntopng (2.2+dfsg1-1build1) xenial; urgency=medium
+
+  * Rebuild against libmysqlclient20.
+
+ -- Robie Basak <robie.basak@ubuntu.com>  Thu, 31 Mar 2016 13:43:44 +0000
+
+ntopng (2.2+dfsg1-1) unstable; urgency=high
+
+  * Imported Upstream version 2.2+dfsg1, including fix for CVE-2015-8368
+    (Closes: #816190).
+  * get-orig-source: do not fail if EWAHBoolArray is missing.
+  * Refresh patches.
+  * Add Build-Depends on libmysqlclient-dev.
+  * Add Build-Depends on libndpi >= 1.7.1~.
+  * Update copyright.
+  * Add no-detectxsslib.patch to prevent use of non-GPL-compatible detectxsslib.
+  * Add lintian-override for some missing-source false positives.
+  * Remove unused handlebars-1.0.0.0.beta.6.js without source from orig tarball.
+  * Use https for Vcs links.
+  * Update copyright.
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Sat, 12 Mar 2016 18:50:05 -0800
+
+ntopng (2.0+dfsg1-1) unstable; urgency=medium
+
+  * Imported Upstream version 2.0+dfsg1
+  * Add Build-Dep on pkg-config (Closes: #797777).
+  * Refresh patches.
+  * Update build dependecies to libndpi-dev >= 1.6 and libcurl-gnutls-dev.
+  * Update doc path location in upstream tarball.
+  * Add use-system-ndpi.patch for using system libndpi.
+  * Drop usage of dh_autoreconf and invoke upstream's autogen.sh
+  * Remove .git tree when creating repackaged upstream tarball.
+  * Update copyright for new sources.
+  * Use system libjs-boostrap.
+  * Add no-pwd.patch avoiding use of the PWD environment variable during build.
+  * Use system boostrap.
+  * Remove pdfmake.js and vfs_fonts.js from upstream tarball as they are not
+    used and do nto have sources.
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Sun, 20 Sep 2015 01:53:02 -0700
+
+ntopng (1.2.1+dfsg1-2) unstable; urgency=low
+
+  * Fix FTBFS due to coffee invocation (Closes: #790091).
+  * Update Standards-Version to 3.9.6.
+  * Use ntopng configuration file /etc/ntopng.conf instead of
+    /etc/default/ntopng.
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Sun, 26 Oct 2014 20:49:24 -0700
+
+ntopng (1.2.1+dfsg1-1.1) unstable; urgency=medium
+
+  * Non-maintainer upload.
+  * Drop unused build-depends on libgnutls-dev. Closes: #764105
+
+ -- Andreas Metzler <ametzler@debian.org>  Sat, 11 Oct 2014 11:51:05 +0200
+
+ntopng (1.2.1+dfsg1-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.2.1+dfsg1 (Closes: #760990, CVE-2014-5464,
+    CVE-2014-5511, CVE-2014-5512, CVE-2014-5513, CVE-2014-5514,
+    CVE-2014-5515).
+  * Remove patches merged upstream: build-flags.patch, libndpi-external.patch,
+    manpage.patch, no-svn.patch, path-defaults.patch, remove-libs.patch, and
+    rickshaw.patch.
+  * Add no-librt.patch to avoid not needed linking against librt.
+  * Fix typos in copyright and removed stanzas for removed files.
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Tue, 09 Sep 2014 21:57:04 -0700
+
+ntopng (1.2.0+dfsg1-1) unstable; urgency=medium
+
+  * Imported Upstream version 1.2.0+dfsg1 (Closes: CVE-2014-4329).
+  * Update watch rule for new upstream naming convention.
+  * get-roig-source: Support both +svn and ~svn in version.
+  * Remove external hiredis from orig tarball.
+  * Remove Rickshaw from orig tarball.
+  * Remove documentation without source from orig tarball and insert an http
+  * Remove corrupted unused serializeCFJSON-0.1.js from orig tarball.
+    link to it in README.Debian.
+  * Remove nDPI from orig tarball.
+  * Remove all debian/missing-sources files that are now included not-minified
+    by upstream. Remove build-deps on node-uglify and cleancss.
+  * Remove references to third-party/redis-lua (removed upstream).
+  * Update copyright.
+  * Refresh patches and remove those merged upstream.
+  * Add external-hiredis.patch to use system libhiredis.
+  * Add rickshaw-keep-one.patch to remove references to additional rickshaw
+    library.
+  * Add no-svn.patch to drop requirement on SVN.
+  * Add manpage.patch to fix usage of minus signs, hyphens, and dashes,
+    missing space and line breaks.
+  * Add rickshaw.patch to use single rickshaw.{css,js} files.
+  * Split library removing part of build-flags.patch into remove-libs.patch.
+  * Rename debian-defaults.patch to path-defaults.patch and use installation
+    path from configure.
+  * Use dh-autoreconf instead of autotools-dev.
+  * Add build-dep on libsqlite3-dev.
+  * Update build-dep on newer libndpi-dev.
+  * Cleanup of dh_install rules.
+  * Fix typo in font-awesome symlink path and remove and updates symlink links
+    in ntopng-data/
+  * Remove executable bit to non executable files.
+  * Use system linjs-jquery tablesorter and form.
+  * Add Build-Dep on libhiredis-dev.
+  * Remove empty httpdocs/ssl directory.
+  * Add systemd support.
+  * Stop supporting ENABLED in /etc/default/ntopng and debian/NEWS to notify
+    users.
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Sun, 27 Jul 2014 16:13:47 -0700
+
+ntopng (1.1+dfsg2-2) unstable; urgency=medium
+
+  * Fix build-flags.patch causing FTBFS (Closes: #754502).
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Sun, 27 Jul 2014 15:19:52 -0700
+
+ntopng (1.1+dfsg2-1) unstable; urgency=medium
+
+  * Initial upload (Closes: #714820).
+  * Remove unsed files without source from orig tarball.
+  * Minify jquery and boostrap during build process.
+  * Include missing sources for minified javascript. Use system libjs-rickshaw.
+  * Fix lintian missing-source warnings.
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Sun, 13 Apr 2014 16:25:14 -0700
+
+ntopng (1.1+dfsg1-1) unstable; urgency=medium
+
+  * Update Standards-Version to 3.9.5.
+  * Repackage orig tarball removing precompiled binaries, non-dfsg-compatile
+    files, and other temporary files.
+  * Remove currenlty unused dependencies on libjs*.
+  * Fix building arch-dependent packages only.
+  * Adjust path of pidfile.
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Sun, 29 Dec 2013 22:50:40 -0800
+
+ntopng (1.1-1) unstable; urgency=low
+
+  * Initial release (Closes: #714820).
+
+ -- Ludovico Cavedon <cavedon@debian.org>  Sun, 17 Nov 2013 15:03:26 -0800

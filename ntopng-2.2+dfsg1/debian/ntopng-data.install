@@ -1,0 +1,3 @@
+httpdocs usr/share/ntopng
+scripts usr/share/ntopng
+debian/generated-code/gauge.js usr/share/ntopng/httpdocs/js
